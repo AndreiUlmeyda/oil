@@ -9,12 +9,18 @@ function joinJsonContent {
 	jq '.[] | .title + "|" + .tags + "|" + .uri'
 }
 
-# cut off each column at a fixed width (awk is probably a bad choice,
-# use simpler tools)
+# fix column width and trim urls
 function limitColumnWidth {
 	awk 'BEGIN {FS = "|"}
 	{
-		print substr($1, 2, 30), "|", substr($2, 1, 30), "|", substr($3, 1, 30)
+		# omit initial quote, max length 40 chars
+		prunedTitle = substr($1, 2, 40)
+		# max lenght 40 chars
+		prunedTags = substr($2, 1, 40)
+		# strip as much as possible from the start of the url
+		prunedUrl = gensub("^https?://(w{3}.)?", "", 1, $3)
+
+		print prunedTitle, "|", prunedTags, "|", prunedUrl
 	}'
 }
 
@@ -31,13 +37,20 @@ function searchBookmarks {
 }
 
 function extractUrl {
-	egrep -o 'https?://[^ ]+'
+	awk '{
+		# match from end of line until rightmost whitespace
+		urlStart = match($0, "\\S*$")
+		# get the substring from previous match, drop last char, which is a "
+		url = substr($0, RSTART, RLENGTH-1)
+		print url
+	}'
 }
 
-# run everything and store peco output
+# run peco, store output
 selectedUrl=$(searchBookmarks | extractUrl)
 
-# open in browser if an url was found
+# open in browser if it contains a url and try to make up for previously pruned prefix
+# WARNING: does not properly restore "https" prefix
 if [ -n "$selectedUrl" ];then
-	xdg-open $selectedUrl
+	xdg-open http://$selectedUrl
 fi
