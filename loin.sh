@@ -19,7 +19,7 @@ function limitColumnWidth {
 }
 
 function alignColumns {
-	column -t -s "|"
+	column -t -s "|" -o ""
 }
 
 function searchBookmarks {
