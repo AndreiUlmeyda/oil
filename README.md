@@ -2,11 +2,11 @@
 Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bookmarks manager using [peco](https://github.com/peco/peco).
 
 ## features
-* View a list of your bookmarks and, while typing, have the list filtered accordingly as well as instantaneously.
+* View a list of your bookmarks and, while typing, have the list instantaneously filtered accordingly.
 * Hit enter on the desired bookmark and it will open in your default browser.
 
 ## usage
-Simply invoke the script inside a terminal, start typing and hit enter when you found what you were looking for (the latter  being great life advice,too). Refer to the peco manual to find out all the shenanigans it allows for.
+Simply invoke the script inside a terminal, start typing and hit enter when you found what you were looking for (the latter  being great life advice, too). Refer to the peco manual to find out all the shenanigans it allows for.
 
 ## dependencies
 * [buku](https://github.com/jarun/Buku)
