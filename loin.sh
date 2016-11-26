@@ -5,7 +5,7 @@ function bookmarksAsJson {
 }
 
 function joinJsonContent {
-	jq '.[] | .title + " | " + .uri + " | " + .tags'
+	jq '.[] | .title + "|" + .tags + "|" + .uri'
 }
 
 function searchBookmarks {
