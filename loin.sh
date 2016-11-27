@@ -19,10 +19,9 @@ function searchAsYouType {
 }
 
 function openInBrowser {
-	read selectedUrl
-	if [ -n "$selectedUrl" ];then
+	while read selectedUrl; do
 		xdg-open $selectedUrl
-	fi
+	done
 }
 
 function openBookmark {
