@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASEDIR=$(readlink -f $0 | xargs -r dirname)
+BASEDIR=$(readlink -f $0 | xargs dirname)
 
 function bookmarksAsJson {
 	buku -p -j
