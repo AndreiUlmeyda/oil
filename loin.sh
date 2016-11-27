@@ -4,8 +4,7 @@ function bookmarksAsJson {
 	buku -p -j
 }
 
-# join all bookmark properties into one line
-function joinJsonContent {
+function jsonToLine {
 	jq '.[] | .title + "|" + .tags + "|" + .uri'
 }
 
@@ -30,7 +29,6 @@ function alignColumns {
 
 function searchBookmarks {
 	bookmarksAsJson |
-	joinJsonContent |
 	limitColumnWidth |
 	alignColumns |
 	peco
@@ -44,6 +42,7 @@ function extractUrl {
 		url = substr($0, RSTART, RLENGTH-1)
 		print url
 	}'
+	jsonToLine |
 }
 
 # run peco, store output
