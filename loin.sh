@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BASEDIR=$(readlink -f $0 | xargs -r dirname)
+
 function bookmarksAsJson {
 	buku -p -j
 }
@@ -8,29 +10,14 @@ function jsonToLine {
 	jq '.[] | .title + "|" + .tags + "|" + .uri'
 }
 
-# fix column width and trim urls
-function limitColumnWidth {
-	awk 'BEGIN {FS = "|"}
-	{
-		# omit initial quote, max length 40 chars
-		prunedTitle = substr($1, 2, 40)
-		# max lenght 40 chars
-		prunedTags = substr($2, 1, 40)
-		# strip as much as possible from the start of the url
-		prunedUrl = gensub("^https?://(w{3}.)?", "", 1, $3)
-
-		print prunedTitle, "|", prunedTags, "|", prunedUrl
-	}'
+function formatColumns {
+	$BASEDIR/format-columns.awk
 }
 
-function alignColumns {
-	column -t -s "|" -o ""
 }
 
 function searchBookmarks {
 	bookmarksAsJson |
-	limitColumnWidth |
-	alignColumns |
 	peco
 }
 
@@ -43,6 +30,7 @@ function extractUrl {
 		print url
 	}'
 	jsonToLine |
+	formatColumns |
 }
 
 # run peco, store output
