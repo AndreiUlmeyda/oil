@@ -14,30 +14,23 @@ function formatColumns {
 	$BASEDIR/format-columns.awk
 }
 
+function searchAsYouType {
+	peco --null
 }
 
-function searchBookmarks {
+function openInBrowser {
+	read selectedUrl
+	if [ -n "$selectedUrl" ];then
+		xdg-open $selectedUrl
+	fi
+}
+
+function openBookmark {
 	bookmarksAsJson |
-	peco
-}
-
-function extractUrl {
-	awk '{
-		# match from end of line until rightmost whitespace
-		urlStart = match($0, "\\S*$")
-		# get the substring from previous match, drop last char, which is a "
-		url = substr($0, RSTART, RLENGTH-1)
-		print url
-	}'
 	jsonToLine |
 	formatColumns |
+	searchAsYouType |
+	openInBrowser
 }
 
-# run peco, store output
-selectedUrl=$(searchBookmarks | extractUrl)
-
-# open in browser if it contains a url and try to make up for previously pruned prefix
-# WARNING: does not properly restore "https" prefix
-if [ -n "$selectedUrl" ];then
-	xdg-open http://$selectedUrl
-fi
+openBookmark
