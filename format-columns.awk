@@ -1,9 +1,9 @@
 #! /bin/awk -f
 
-# set field delimiter
-BEGIN {FS = "|"}
-
 {
+	# set field delimiter
+	FS = "|"
+
 	# strip input of leading and trailing double quotes
 	gsub(/[(^\")(\"$)]/, "", $0)
 	# limit some column widths
