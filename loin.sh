@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASEDIR=$(readlink -f $0 | xargs dirname)
+BASEDIR=$(readlink -f "$0" | xargs dirname)
 
 function bookmarksAsJson {
 	buku -p -j
@@ -11,7 +11,7 @@ function jsonToLine {
 }
 
 function formatColumns {
-	$BASEDIR/format-columns.awk
+	"$BASEDIR"/format-columns.awk
 }
 
 function searchAsYouType {
@@ -19,8 +19,8 @@ function searchAsYouType {
 }
 
 function openInBrowser {
-	while read selectedUrl; do
-		xdg-open $selectedUrl
+	while read -r selectedUrl; do
+		xdg-open "$selectedUrl"
 	done
 }
 
