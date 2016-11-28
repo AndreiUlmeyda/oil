@@ -6,9 +6,6 @@
 	
 	# set field delimiter
 	FS = "|"
-
-	# strip input of leading and trailing double quotes
-	gsub(/[(^\")(\"$)]/, "", $0)
 	
 	# make fields fit intended column widths
 	prunedTitle = substr($1, 1, titleColumnWidth)

@@ -7,7 +7,7 @@ function bookmarksAsJson {
 }
 
 function jsonToLine {
-	jq '.[] | .title + "|" + .tags + "|" + .uri'
+	jq -r '.[] | .title + "|" + .tags + "|" + .uri'
 }
 
 function formatColumns {
