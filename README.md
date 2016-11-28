@@ -23,7 +23,7 @@ Or even
 
 `urxvt -name bookmarkViewer -e "<path-to-loin>/loin.sh"`
 
-in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules'section of your awesome wm config to have it opened in any special way you like (I have it popup fullscreen in my case).
+in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules' section of your awesome wm config to have it opened in any special way you like (I have it popup fullscreen).
 
 Customize your peco config to, *no offense peco, you know I love you and all but*, make it look nice. And **enable** it's feature **to select multiple lines at once**. For the latter you need to consult the peco README and then add to your config something like
 
