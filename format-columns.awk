@@ -1,11 +1,11 @@
 #! /bin/awk -f
 
+# set field delimiter
+BEGIN {FS = "|"}
+
 {
 	titleColumnWidth = 40
 	tagColumnWidth = 30
-	
-	# set field delimiter
-	FS = "|"
 	
 	# make fields fit intended column widths
 	prunedTitle = substr($1, 1, titleColumnWidth)
