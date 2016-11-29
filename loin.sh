@@ -37,8 +37,8 @@ function searchAndSelectBookmarks {
 }
 
 function askUserForTag {
-	read -p "input the tag to add: " tag
-	echo $tag
+	read -r -p "input the tag to add: " tag
+	echo "$tag"
 }
 
 function tagBookmarkAtIndex {
@@ -47,12 +47,12 @@ function tagBookmarkAtIndex {
 	buku --update "$index" --tag "$tag"
 }
 
-function tagAllUrls {
+function tagBookmarks {
 	urlsAndIndices=$(searchAndSelectBookmarks)
 	tag=$(askUserForTag)
-	for urlAndIndex in ${urlsAndIndices[@]}; do
+	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		index=${urlAndIndex#*|}
-		tagBookmarkAtIndex $index $tag
+		tagBookmarkAtIndex "$index" "$tag"
 	done
 
 }
@@ -61,5 +61,5 @@ MODE="tag" # "open or tag"
 if [ $MODE = "open" ]; then
 	searchAndSelectBookmarks | openInBrowser
 elif [ $MODE = "tag" ]; then
-	tagAllUrls
+	tagBookmarks
 fi
