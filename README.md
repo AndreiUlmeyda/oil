@@ -4,12 +4,15 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 ## features
 * View a list of your (buku managed) bookmarks and their tags and titles in your terminal
 * While typing, have the list instantaneously filtered accordingly
-* After selecting one (hit Enter) or multiple bookmarks (see the peco manual), have them opened in your browser
+* After selecting one (hit Enter) or multiple bookmarks (read below), have them opened in your browser
+
+## feature futures
+* Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them. Weeee
 
 ## basic usage
-Navigate to the scripts folder and simply invoke it inside a terminal like so
+After cloning the repository, navigate to it's folder, make sure it is executable and simply invoke the script inside a terminal like so
 
-`./loin.sh`
+`./loin`
 
 start typing and hit enter when you found what you were looking for (the latter  being great life advice, too).
 ## a bit more streamlined usage
@@ -17,11 +20,11 @@ start typing and hit enter when you found what you were looking for (the latter 
 
 Quicker to access yet, **set up a hotkey using your window manager**. I can only outline a solution for one (mine) particular setup since the diversity of desktop environments is great. Using the window manager "awesome wm" I register a hotkey to execute something like
 
-`urxvt -e "<path-to-loin>/loin.sh"`
+`urxvt -e "<path-to-loin>/loin"`
 
 Or even
 
-`urxvt -name bookmarkViewer -e "<path-to-loin>/loin.sh"`
+`urxvt -name bookmarkViewer -e "<path-to-loin>/loin"`
 
 in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules' section of your awesome wm config to have it opened in any special way you like (I have it popup fullscreen).
 
