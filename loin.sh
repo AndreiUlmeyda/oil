@@ -7,7 +7,9 @@ function bookmarksAsJson {
 }
 
 function jsonToLine {
-	jq -r '.[] | .title + "|" + .tags + "|" + .uri'
+	# put the content into an array while casting  index to string and join its
+	# elements using the separator "|"
+	jq -r '. | (objects | . |  [.title, .tags, .uri, .index|tostring] | join("|")), (. | arrays | .[] | [ .title, .tags, .uri, .index|tostring] | join("|"))'
 }
 
 function formatColumns {
