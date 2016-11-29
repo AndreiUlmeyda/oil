@@ -44,7 +44,7 @@ function askUserForTag {
 function tagBookmarkAtIndex {
 	index=$1
 	tag=$2
-	echo "buku --update $index --tag $tag"
+	buku --update "$index" --tag "$tag"
 }
 
 function tagAllUrls {
