@@ -6,7 +6,7 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * While typing, have the list instantaneously filtered accordingly
 * After selecting one (hit Enter) or multiple bookmarks (read below), have them opened in your browser
 
-## feature futures
+## not-yet-features
 * Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them. Weeee
 
 ## basic usage
