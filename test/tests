@@ -4,12 +4,26 @@ load 'helpers/bats-support/load'
 load 'helpers/bats-assert/load'
 load 'helpers/mocks/stub'
 
-assertSuccessWithOutput(){
+# supply your loin base directory here, for instance
+# BASEDIR="/home/jellykid/repositories/loin"
+BASEDIR=""
+
+function assertSuccessWithOutput {
 	assert_success
     assert_output "$1"
 }
 
-@test "nope, chuck te..nevermind" {
-	run bash -c 'echo "I am a dummy test"'
-	assertSuccessWithOutput "I am a dummy test"
+function assertFailureWithMessage {
+	assert_failure
+	assert_output "$1"
+}
+
+function loin {
+	run bash -c "$BASEDIR/loin $1"
+}
+@test "called with unsupported argument, it should print a notice" {
+	badArg="unintended"
+	badArgError='Error: loin takes no arguments, run in Tag-Mode by specifying the flag "--tag"'
+	loin $badArg
+	assertFailureWithMessage "$badArgError"
 }
