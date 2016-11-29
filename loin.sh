@@ -57,9 +57,21 @@ function tagBookmarks {
 
 }
 
-MODE="tag" # "open or tag"
-if [ $MODE = "open" ]; then
+function openBookmarks {
 	searchAndSelectBookmarks | openInBrowser
-elif [ $MODE = "tag" ]; then
+}
+
+# set default mode
+MODE="open"
+
+# parse tag mode command line flag
+if [ "$1" = "--tag" ]; then
+	MODE="tag"
+fi
+
+# execute
+if [ "$MODE" = "open" ]; then
+	openBookmarks
+elif [ "$MODE" = "tag" ]; then
 	tagBookmarks
 fi
