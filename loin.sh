@@ -21,17 +21,43 @@ function searchAsYouType {
 }
 
 function openInBrowser {
-	while read -r selectedUrl; do
+	while read -r selectedUrlAndIndex; do
+		selectedUrl=${selectedUrlAndIndex%|*}
 		xdg-open "$selectedUrl"
 	done
 }
 
-function openBookmark {
+function searchAndSelectBookmarks {
 	bookmarksAsJson |
 	jsonToLine |
 	formatColumns |
-	searchAsYouType |
-	openInBrowser
+	searchAsYouType
 }
 
-openBookmark
+function askUserForTag {
+	read -p "input the tag to add: " tag
+	echo $tag
+}
+
+function tagBookmarkAtIndex {
+	index=$1
+	tag=$2
+	echo "buku --update $index --tag $tag"
+}
+
+function tagAllUrls {
+	urlsAndIndices=$(searchAndSelectBookmarks)
+	tag=$(askUserForTag)
+	for urlAndIndex in ${urlsAndIndices[@]}; do
+		index=${urlAndIndex#*|}
+		tagBookmarkAtIndex $index $tag
+	done
+
+}
+
+MODE="tag" # "open or tag"
+if [ $MODE = "open" ]; then
+	searchAndSelectBookmarks | openInBrowser
+elif [ $MODE = "tag" ]; then
+	tagAllUrls
+fi
