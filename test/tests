@@ -23,7 +23,9 @@ function loin {
 }
 @test "called with unsupported argument, it should print a notice" {
 	badArg="unintended"
-	badArgError='Error: loin takes no arguments, run in Tag-Mode by specifying the flag "--tag"'
-	loin $badArg
+	badArgError='loin error: invalid argument, for now the only valid argument is the flag "--tag"'
+	
+	loin "$badArg"
+	
 	assertFailureWithMessage "$badArgError"
 }

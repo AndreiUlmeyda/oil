@@ -59,8 +59,7 @@ function openBookmarks {
 
 # set default mode
 MODE="open"
-
-BADARGERROR='Error: loin takes no arguments, run in Tag-Mode by specifying the flag "--tag"'
+BADARGERROR='loin error: invalid argument, for now the only valid argument is the flag "--tag"'
 
 # parse tag mode command line flag, throw error in invalid input
 if [[ "$1" == "--tag" ]]; then
