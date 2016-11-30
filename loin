@@ -62,17 +62,17 @@ MODE="open"
 
 BADARGERROR='Error: loin takes no arguments, run in Tag-Mode by specifying the flag "--tag"'
 
-# parse tag mode command line flag
-if [ "$1" = "--tag" ]; then
+# parse tag mode command line flag, throw error in invalid input
+if [[ "$1" == "--tag" ]]; then
 	MODE="tag"
-elif [ -n $1 ]; then
+elif [[ -n "$1" ]]; then
 	echo "$BADARGERROR"
 	exit 1
 fi
 
-# execute
-if [ "$MODE" = "open" ]; then
+# execute"$1"
+if [[ "$MODE" == "open" ]]; then
 	openBookmarks
-elif [ "$MODE" = "tag" ]; then
+elif [[ "$MODE" == "tag" ]]; then
 	tagBookmarks
 fi
