@@ -5,14 +5,12 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * View a list of your (buku managed) bookmarks and their tags and titles in your terminal
 * While typing, have the list instantaneously filtered accordingly
 * After selecting one (hit Enter) or multiple bookmarks (read below), have them opened in your browser
-
-## not-yet-features
 * Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them. Weeee
 
 ## basic usage
 After cloning the repository, navigate to it's folder, make sure it is executable and simply invoke the script inside a terminal like so
 
-`./loin`
+`./loin`, or `./loin --tag` if you want to apply tags,
 
 start typing and hit enter when you found what you were looking for (the latter  being great life advice, too).
 ## a bit more streamlined usage
