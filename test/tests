@@ -19,8 +19,10 @@ function assertFailureWithMessage {
 }
 
 function loin {
-	run bash -c "$BASEDIR/loin $1"
+	commandUnderTest="$BASEDIR/loin $1"
+	run bash -c "$commandUnderTest"
 }
+
 @test "called with unsupported argument, it should print a notice" {
 	badArg="unintended"
 	badArgError='loin error: invalid argument, for now the only valid argument is the flag "--tag"'
@@ -28,4 +30,18 @@ function loin {
 	loin "$badArg"
 	
 	assertFailureWithMessage "$badArgError"
+}
+
+@test "given one selected bookmark, call xdg-open with url" {
+	stub buku 'echo {}'
+	stub peco 'echo "url|1"'
+	stub xdg-open 'url : '
+	
+	loin
+
+	assertSuccessWithOutput ""
+
+	unstub xdg-open
+	unstub peco
+	unstub buku
 }
