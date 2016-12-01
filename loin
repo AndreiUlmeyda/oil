@@ -43,7 +43,7 @@ function tagBookmarkAtIndex {
 	buku --update "$index" --tag "$tag"
 }
 
-function exitWhenNoneSelected {
+function exitWhenEmpty {
 	if [[ -z $1 ]]; then
 		exit 0
 	fi
@@ -51,7 +51,7 @@ function exitWhenNoneSelected {
 
 function tagBookmarks {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
-	exitWhenNoneSelected $urlsAndIndices
+	exitWhenEmpty $urlsAndIndices
 	tag=$(askUserForTag)
 
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
