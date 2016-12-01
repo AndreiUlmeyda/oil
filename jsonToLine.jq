@@ -4,5 +4,5 @@
 # single objects or object arrays 
 def valuesToLine: [.title, .tags, .uri, .index|tostring] | join("↓");
 
-. | (objects | . |  valuesToLine),
-	(arrays | .[] | valuesToLine)
+(objects | . |  valuesToLine),
+(arrays | .[] | valuesToLine)
