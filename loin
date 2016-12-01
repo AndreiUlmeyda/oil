@@ -49,6 +49,14 @@ function exitWhenEmpty {
 	fi
 }
 
+function updateTitle {
+	urlsAndIndices=(`searchAndSelectBookmarks`)
+	urlAndIndex=${urlsAndIndices[0]}
+	index="${urlAndIndex#*|}"
+	read -r -p "new title: " newTitle
+	buku -u "$index" -t "$newTitle"
+}
+
 function tagBookmarks {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
 	exitWhenEmpty $urlsAndIndices
@@ -71,6 +79,8 @@ BADARGERROR='loin error: invalid argument, for now the only valid argument is th
 # parse tag mode command line flag, throw error on invalid input
 if [[ "$1" == "--tag" ]]; then
 	MODE="tag"
+elif [[ "$1" ==  "--title" ]]; then
+	MODE="title"
 elif [[ -n "$1" ]]; then
 	echo "$BADARGERROR"
 	exit 1
@@ -81,4 +91,6 @@ if [[ "$MODE" == "open" ]]; then
 	openBookmarks
 elif [[ "$MODE" == "tag" ]]; then
 	tagBookmarks
+elif [[ "$MODE" == "title" ]]; then
+	updateTitle
 fi
