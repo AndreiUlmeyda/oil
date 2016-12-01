@@ -43,9 +43,17 @@ function tagBookmarkAtIndex {
 	buku --update "$index" --tag "$tag"
 }
 
+function exitWhenNoneSelected {
+	if [[ -z $1 ]]; then
+		exit 0
+	fi
+}
+
 function tagBookmarks {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
+	exitWhenNoneSelected $urlsAndIndices
 	tag=$(askUserForTag)
+
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		index="${urlAndIndex#*|}"
 		tagBookmarkAtIndex "$index" "$tag"
@@ -60,7 +68,7 @@ function openBookmarks {
 MODE="open"
 BADARGERROR='loin error: invalid argument, for now the only valid argument is the flag "--tag"'
 
-# parse tag mode command line flag, throw error in invalid input
+# parse tag mode command line flag, throw error on invalid input
 if [[ "$1" == "--tag" ]]; then
 	MODE="tag"
 elif [[ -n "$1" ]]; then
