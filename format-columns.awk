@@ -1,7 +1,7 @@
 #! /bin/awk -f
 
 # set field delimiter
-BEGIN {FS = "|"}
+BEGIN {FS = "↓"}
 
 {
 	titleColumnWidth = 40
