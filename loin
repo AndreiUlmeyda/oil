@@ -15,7 +15,7 @@ function formatColumns {
 }
 
 function searchAsYouType {
-	peco --null
+	peco --prompt "$MODE:" --null
 }
 
 function openInBrowser {
