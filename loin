@@ -33,7 +33,7 @@ function searchAndSelectBookmarks {
 }
 
 function askUserForTag {
-	read -r -p "input the tag to add: " tag
+	read -r -p "input the comma separated list of tags to add: " tag
 	echo "$tag"
 }
 
@@ -50,11 +50,24 @@ function exitWhenEmpty {
 }
 
 function updateTitle {
+	# print buku output, ask for new title, set new title
+	index=$1
+	buku -p "$index"
+	read -r -p "Enter a new title for the bookmark above: " newTitle
+	if [[ -n $newTitle ]]; then
+		buku -u "$index" -t "$newTitle"
+	else
+		echo "The new title was empty, no update was done."
+	fi
+}
+
+function updateTitles {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
-	urlAndIndex=${urlsAndIndices[0]}
-	index="${urlAndIndex#*|}"
-	read -r -p "new title: " newTitle
-	buku -u "$index" -t "$newTitle"
+	exitWhenEmpty $urlsAndIndices
+	for urlAndIndex in "${urlsAndIndices[@]}"; do
+		index="${urlAndIndex#*|}"
+		updateTitle "$index"
+	done
 }
 
 function tagBookmarks {
@@ -92,5 +105,5 @@ if [[ "$MODE" == "open" ]]; then
 elif [[ "$MODE" == "tag" ]]; then
 	tagBookmarks
 elif [[ "$MODE" == "title" ]]; then
-	updateTitle
+	updateTitles
 fi
