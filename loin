@@ -49,24 +49,18 @@ function exitWhenEmpty {
 	fi
 }
 
-function updateTitle {
-	# print buku output, ask for new title, set new title
-	index=$1
-	buku -p "$index"
-	read -r -p "Enter a new title for the bookmark above: " newTitle
-	if [[ -n $newTitle ]]; then
-	else
-		echo "The new title was empty, no update was done."
-	fi
-}
-
 function updateTitles {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
 	exitWhenEmpty $urlsAndIndices
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		index="${urlAndIndex#*|}"
-		updateTitle "$index"
+		buku -p "$index"
+		read -r -p "Enter a new title for the bookmark above: " newTitle
+		if [[ -n $newTitle ]]; then
 			buku --tacit -u "$index" -t "$newTitle"
+		else
+			echo "The new title was empty, no update was done."
+		fi
 	done
 }
 
