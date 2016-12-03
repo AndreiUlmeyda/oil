@@ -1,6 +1,8 @@
 # loin
 Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bookmarks manager using [peco](https://github.com/peco/peco). It runs on Linux and inside your favourite terminal emulator.
 
+[![loin-demo.gif](https://s13.postimg.org/ph4t1fchz/loin_demo.gif)](https://postimg.org/image/snzcl1wxv/)
+
 ## features
 * View a list of your (buku managed) bookmarks and their tags and titles in your terminal
 * While typing, have the list instantaneously filtered accordingly
