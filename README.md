@@ -11,7 +11,7 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * Title-Mode: After selecting the bookmarks, get prompted for a new title for each one.
 
 ## basic usage
-After cloning the repository, navigate to it's folder, make sure it is executable and simply invoke the script inside a terminal like so
+After cloning the repository, navigate to it's folder, make sure the three scripts are executable and simply invoke the loin inside a terminal like so
 
 `./loin`, or `./loin --tag` if you want to apply tags,
 
