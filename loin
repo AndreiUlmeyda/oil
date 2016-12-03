@@ -55,7 +55,6 @@ function updateTitle {
 	buku -p "$index"
 	read -r -p "Enter a new title for the bookmark above: " newTitle
 	if [[ -n $newTitle ]]; then
-		buku -u "$index" -t "$newTitle"
 	else
 		echo "The new title was empty, no update was done."
 	fi
@@ -67,6 +66,7 @@ function updateTitles {
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		index="${urlAndIndex#*|}"
 		updateTitle "$index"
+			buku --tacit -u "$index" -t "$newTitle"
 	done
 }
 
