@@ -15,8 +15,13 @@ function formatColumns {
 }
 
 function searchAsYouType {
-	# show mode of operation, enable passing strings which are not displayed but used as output
-	peco --prompt "$mode:" --null
+	# enable multiline selection by default, show mode of operation, enable passing strings
+	# to peco which are not displayed but used as output
+	if [[ "$forceMultilineSelection" == true ]]; then
+		peco --rcfile $tmpPecoConfig --null
+	else
+		peco --prompt "$mode" --null
+	fi
 }
 
 function searchAndSelectBookmarks {
@@ -85,58 +90,68 @@ function deleteBookmarks {
 	done
 }
 
-# parse command line arguments #
+function parseFlags {
+	# check if getopt is available
+	parsingLibraryError="The method used to parse command line flags is not available on your system, see the github page for directions."
+	getopt --test > /dev/null
+	if [[ $? -ne 4 ]]; then
+	    echo "$parsingLibraryError"
+	    exit 1
+	fi
 
-# check if getopt is available
-parsingLibraryError="The method used to parse command line flags is not available on your system, see the github page for directions."
-getopt --test > /dev/null
-if [[ $? -ne 4 ]]; then
-    echo "$parsingLibraryError"
-    exit 1
-fi
+	# specify valid flags
+	shortOptions=htTpd
+	longOptions=help,tag,title,delete,no-peco-reconfiguration
 
-# specify valid flags
-shortOptions=htTd
-longOptions=help,tag,title,delete
+	parsed=$(getopt --options $shortOptions --longoptions $longOptions --name "$0" -- "$@")
 
-PARSED=$(getopt --options $shortOptions --longoptions $longOptions --name "$0" -- "$@")
+	# exit if parsing arguments failed
+	if [[ $? -ne 0 ]]; then
+	    exit 1
+	fi
 
-# exit if parsing arguments failed
-if [[ $? -ne 0 ]]; then
-    exit 1
-fi
+	helpText="herpderp"
 
-# default behaviour
-mode="open"
+	while true; do
+	    case "$1" in
+	    	-h|--help)
+				echo "$helpText"
+				exit 0
+				;;
+	        -t|--tag)
+	            mode="tag"
+	            shift
+	            ;;
+	        -T|--title)
+	            mode="title"
+	            shift
+	            ;;
+	        -d|--delete)
+	        	mode="delete"
+	        	shift
+	        	;;
+	        -p|--no-peco-reconfiguration)
+	        	forceMultilineSelection=false
+	        	shift
+	        	;;
+	        *)
+				break
+				;;
+	    esac
+	done
+}
 
-helpText="herpderp"
+# if not specified otherwise, make a temporary file for use as a custom peco config that has multiline selection enabled
+function prepareMultilineSelection {
+	if [[ "$forceMultilineSelection" == true ]]; then
+		tmpPecoConfig=$(mktemp /tmp/oil-multiline-selection.XXX)
+		config="{\"Prompt\":\"$mode\",\"StickySelection\": true,\"Action\":{\"selectAndMoveDown\":[\"peco.ToggleSelection\",\"peco.SelectDown\"]},\"Keymap\":{\"C-Space\":\"selectAndMoveDown\",\"ArrowLeft\":\"peco.ScrollLeft\",\"ArrowRight\":\"peco.ScrollRight\"}}"
+		echo $config > $tmpPecoConfig
+	fi
+}
 
-while true; do
-    case "$1" in
-    	-h|--help)
-			echo "$helpText"
-			exit 0
-			;;
-        -t|--tag)
-            mode="tag"
-            shift
-            ;;
-        -T|--title)
-            mode="title"
-            shift
-            ;;
-        -d|--delete)
-        	mode="delete"
-        	shift
-        	;;
-        *)
-			break
-			;;
-    esac
-done
-
-# run
-case "$mode" in
+function runSelectedMode {
+	case "$mode" in
 	open)
 		openBookmarks
 		;;
@@ -149,4 +164,22 @@ case "$mode" in
 	delete)
 		deleteBookmarks
 		;;
-esac
+	esac
+}
+
+function cleanUp {
+	if [[ -e $tmpPecoConfig ]]; then
+		rm $tmpPecoConfig
+	fi
+}
+
+
+# default behaviour
+mode="open"
+forceMultilineSelection=true
+
+# run
+parseFlags $@
+prepareMultilineSelection
+runSelectedMode
+cleanUp
