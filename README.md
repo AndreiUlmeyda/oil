@@ -9,13 +9,15 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * After selecting one (hit Enter) or multiple bookmarks (read below), have them opened in your browser
 * Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them.
 * Title-Mode: After selecting the bookmarks, get prompted for a new title for each one.
+* Delete-Mode: After selecting the bookmarks, delete each one.
 
 ## basic usage
 After cloning the repository, navigate to it's folder, make sure the three scripts are executable and simply invoke loin inside a terminal like so
 
-`./loin`, or `./loin --tag` if you want to apply tags,
+`./loin`
 
 start typing and hit enter when you found what you were looking for (the latter  being great life advice, too).
+
 ## a bit more streamlined usage
 **Set up an alias** for your shell. Refer to your shell's manual on how to do that. If you do not know off of the top of your cat which one you are using, try entering `ps -p $$` into your terminal and hit enter. The end of the second line, for instance "zsh" or "csh", should tell you what term to throw in the general direction of google to get you on track.
 
@@ -59,10 +61,6 @@ to make multiple selection as easy as hitting "Ctrl+Space" a bunch of times and 
 * [buku](https://github.com/jarun/Buku)
 * [peco](https://github.com/peco/peco)
 * [jq](https://github.com/stedolan/jq)
-* [bats](https://github.com/sstephenson/bats) (for running the tests only)
-
-## testing
-The tests are written using [bats](https://github.com/sstephenson/bats) and are run by executing the file "tests" inside a folder you're just gonna have to guess right now, I'm a busy person. Prior to running it for the first time you will need to specify one path to the testfile. Edit it, search the BASEDIR variable and follow the instructions in the comment. Notice that most functionality concerning mocks and assertions is spread out over the supporting modules [bats-mock](https://github.com/jasonkarns/bats-mock), [bats-support](https://github.com/ztombol/bats-support) and [bats-assert](https://github.com/ztombol/bats-assert) that come packaged with loin in case you need to research the workings of the bats test files. Lastly, let me bother you with an excellent tool I've come across a while ago named [entr](http://entrproject.org/). It is a file watcher that lives as comfortably in your terminal as buku and peco do. Navigate to the test folder and run `ls tests | entr -c tests` in a terminal next to your editor and you will have the better part of a neat little shell script development environment set up. It executes the unit tests, or whatever you point it's pointy end at, every time any of the files piped into it change. Include source files as well or go the extra mile nobody asked you to go and produce a [cronenberg](http://rickandmorty.wikia.com/wiki/Cronenbergs)-command like `ls test/tests loin format-columns.awk | entr -c zsh -c 'TIMEFMT="time %E memory %MkB"; time bats test/tests` if you are so inclined.
 
 ## disclaimer
 You wish! I'll never give back a god damned thing I've claimed. But, really, I think it likely that you will run into issues regarding the length of the titles and tags of your bookmarks and the width of your terminal in your favourite use case. Write me an issue and we will, together, iron out the best compromise or configuration option. For the moment, if you have that problem and feel adventurous, take a look at the awk script itself (the scripts are tiny compared to the wall of text you just scaled) and look at the two lines setting up `printf` near the end. Fuck around with them and the variables specifying the column widths until the result pleases you. Good luck, my friend.
