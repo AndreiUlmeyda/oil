@@ -23,7 +23,7 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
                 run in title-mode (see features)
       -d, --delete
                 run in delete-mode (see features)
-      -p, --no-peco-reconfigure
+      -p, --no-peco-reconfiguration
                 do not overwrite the users peco configuration (see section about multiline selection)
       
       Note: Mind that the three modes are mutually exclusive. If more than one is specified it could
@@ -37,7 +37,7 @@ start typing and hit enter when you found what you were looking for (the latter 
 
 ## multiline selection
 This is a feature of peco that is not enabled by default. Anticipating that most users will not already be using peco but will want to use the feature and not drudge through a bunch of configuration options, oil enables it by default by passing a custom configuration file to peco. This leads to the users configuration being overruled. Should you want to use your own peco config, disable this behaviour via the flags
-`oil -p` or equivalently `oil --no-peco-reconfigure`
+`oil -p` or equivalently `oil --no-peco-reconfiguration`
 
 In case you choose to do this but do not have multiline selection enabled in your peco config, read up on the configuration section of peco and amend your config with something like
 
