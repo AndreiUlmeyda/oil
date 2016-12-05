@@ -15,13 +15,6 @@ function formatColumns {
 }
 
 function searchAsYouType {
-}
-
-function openInBrowser {
-	while read -r selectedUrlAndIndex; do
-		selectedUrl=${selectedUrlAndIndex%|*}
-		xdg-open "$selectedUrl"
-	done
 	# show mode of operation, enable passing strings which are not displayed but used as output
 	peco --prompt "$mode:" --null
 }
@@ -33,21 +26,37 @@ function searchAndSelectBookmarks {
 	searchAsYouType
 }
 
-function askUserForTag {
-	read -r -p "input the comma separated list of tags to add: " tag
-	echo "$tag"
+function openInBrowser {
+	while read -r selectedUrlAndIndex; do
+		selectedUrl=${selectedUrlAndIndex%|*}
+		xdg-open "$selectedUrl"
+	done
 }
 
-function tagBookmarkAtIndex {
-	index=$1
-	tag=$2
-	buku --update "$index" --tag "$tag"
+function openBookmarks {
+	searchAndSelectBookmarks | openInBrowser
 }
 
 function exitWhenEmpty {
 	if [[ -z $1 ]]; then
 		exit 0
 	fi
+}
+
+function askUserForTag {
+	read -r -p "input the comma separated list of tags to add: " tag
+	echo "$tag"
+}
+
+function tagBookmarks {
+	urlsAndIndices=(`searchAndSelectBookmarks`)
+	exitWhenEmpty $urlsAndIndices
+	tag=$(askUserForTag)
+
+	for urlAndIndex in "${urlsAndIndices[@]}"; do
+		index="${urlAndIndex#*|}"
+		buku --update "$index" --tag "$tag"
+	done
 }
 
 function updateTitles {
@@ -65,20 +74,17 @@ function updateTitles {
 	done
 }
 
-function tagBookmarks {
+function deleteBookmarks {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
 	exitWhenEmpty $urlsAndIndices
-	tag=$(askUserForTag)
 
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
-		index="${urlAndIndex#*|}"
-		tagBookmarkAtIndex "$index" "$tag"
+		url="${urlAndIndex%|*}"
+		withoutTrailingSlash="${url%/}"
+		buku --sany "$withoutTrailingSlash" --delete
 	done
 }
 
-function openBookmarks {
-	searchAndSelectBookmarks | openInBrowser
-}
 # parse command line arguments #
 
 # check if getopt is available
