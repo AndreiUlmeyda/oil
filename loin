@@ -15,14 +15,8 @@ function formatColumns {
 }
 
 function searchAsYouType {
-	peco --prompt "$MODE:" --null
-}
-
-function openInBrowser {
-	while read -r selectedUrlAndIndex; do
-		selectedUrl=${selectedUrlAndIndex%|*}
-		xdg-open "$selectedUrl"
-	done
+	# show mode of operation, enable passing strings which are not displayed but used as output
+	peco --prompt "$mode:" --null
 }
 
 function searchAndSelectBookmarks {
@@ -32,21 +26,37 @@ function searchAndSelectBookmarks {
 	searchAsYouType
 }
 
-function askUserForTag {
-	read -r -p "input the comma separated list of tags to add: " tag
-	echo "$tag"
+function openInBrowser {
+	while read -r selectedUrlAndIndex; do
+		selectedUrl=${selectedUrlAndIndex%|*}
+		xdg-open "$selectedUrl"
+	done
 }
 
-function tagBookmarkAtIndex {
-	index=$1
-	tag=$2
-	buku --update "$index" --tag "$tag"
+function openBookmarks {
+	searchAndSelectBookmarks | openInBrowser
 }
 
 function exitWhenEmpty {
 	if [[ -z $1 ]]; then
 		exit 0
 	fi
+}
+
+function askUserForTag {
+	read -r -p "input the comma separated list of tags to add: " tag
+	echo "$tag"
+}
+
+function tagBookmarks {
+	urlsAndIndices=(`searchAndSelectBookmarks`)
+	exitWhenEmpty $urlsAndIndices
+	tag=$(askUserForTag)
+
+	for urlAndIndex in "${urlsAndIndices[@]}"; do
+		index="${urlAndIndex#*|}"
+		buku --update "$index" --tag "$tag"
+	done
 }
 
 function updateTitles {
@@ -64,40 +74,79 @@ function updateTitles {
 	done
 }
 
-function tagBookmarks {
+function deleteBookmarks {
 	urlsAndIndices=(`searchAndSelectBookmarks`)
 	exitWhenEmpty $urlsAndIndices
-	tag=$(askUserForTag)
 
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
-		index="${urlAndIndex#*|}"
-		tagBookmarkAtIndex "$index" "$tag"
+		url="${urlAndIndex%|*}"
+		withoutTrailingSlash="${url%/}"
+		buku --sany "$withoutTrailingSlash" --delete
 	done
 }
 
-function openBookmarks {
-	searchAndSelectBookmarks | openInBrowser
-}
+# parse command line arguments #
 
-# set default mode
-MODE="open"
-BADARGERROR='loin error: invalid argument, for now the only valid argument is the flag "--tag"'
-
-# parse tag mode command line flag, throw error on invalid input
-if [[ "$1" == "--tag" ]]; then
-	MODE="tag"
-elif [[ "$1" ==  "--title" ]]; then
-	MODE="title"
-elif [[ -n "$1" ]]; then
-	echo "$BADARGERROR"
-	exit 1
+# check if getopt is available
+parsingLibraryError="The method used to parse command line flags is not available on your system, see the github page for directions."
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "$parsingLibraryError"
+    exit 1
 fi
+
+# specify valid flags
+shortOptions=htTd
+longOptions=help,tag,title,delete
+
+PARSED=$(getopt --options $shortOptions --longoptions $longOptions --name "$0" -- "$@")
+
+# exit if parsing arguments failed
+if [[ $? -ne 0 ]]; then
+    exit 1
+fi
+
+# default behaviour
+mode="open"
+
+helpText="herpderp"
+
+while true; do
+    case "$1" in
+    	-h|--help)
+			echo "$helpText"
+			exit 0
+			;;
+        -t|--tag)
+            mode="tag"
+            shift
+            ;;
+        -T|--title)
+            mode="title"
+            shift
+            ;;
+        -d|--delete)
+        	mode="delete"
+        	shift
+        	;;
+        *)
+			break
+			;;
+    esac
+done
 
 # run
-if [[ "$MODE" == "open" ]]; then
-	openBookmarks
-elif [[ "$MODE" == "tag" ]]; then
-	tagBookmarks
-elif [[ "$MODE" == "title" ]]; then
-	updateTitles
-fi
+case "$mode" in
+	open)
+		openBookmarks
+		;;
+	tag)
+		tagBookmarks
+		;;
+	title)
+		updateTitles
+		;;
+	delete)
+		deleteBookmarks
+		;;
+esac
