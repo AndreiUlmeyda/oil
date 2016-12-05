@@ -1,12 +1,19 @@
 #! /bin/awk -f
 
-# set field delimiter
-BEGIN {FS = "↓"}
+# take a line containing a "↓"-separated string like
+# best title↓worst tag, mediocre tag↓https://someurl↓42
+# to a column format like
+# best title        | worst tag, mediocre tag           | someurl\0https://someurl|42
+# parts after the null byte are interpreted by peco as text that is not to be shown
+# but only returned
 
-{
+BEGIN {
+	FS = "↓"
 	titleColumnWidth = 40
 	tagColumnWidth = 30
-	
+}
+
+{	
 	# make fields fit intended column widths
 	prunedTitle = substr($1, 1, titleColumnWidth)
 	prunedTags = substr($2, 1, tagColumnWidth)
