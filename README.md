@@ -25,8 +25,9 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
                 run in delete-mode (see features)
       -p, --no-peco-reconfigure
                 do not overwrite the users peco configuration (see section about multiline selection)
-      Note: Mind that the three modes are mutually exclusive. If more than one is specified it could cause all sorts
-      of mayhem, who knows (the last one applies, but please don't).
+      
+      Note: Mind that the three modes are mutually exclusive. If more than one is specified it could
+      cause all sorts of mayhem, who knows (the last one applies, but please don't).
 
 After cloning the repository, navigate to it's directory, make sure the three scripts are executable and simply invoke oil inside a terminal like so
 
@@ -36,7 +37,7 @@ start typing and hit enter when you found what you were looking for (the latter 
 
 ## multiline selection
 This is a feature of peco that is not enabled by default. Anticipating that most users will not already be using peco but will want to use the feature and not drudge through a bunch of configuration options, oil enables it by default by passing a custom configuration file to peco. This leads to the users configuration being overruled. Should you want to use your own peco config, disable this behaviour via the flags
-`oil -p` / `oil --no-peco-reconfigure`
+`oil -p` or equivalently `oil --no-peco-reconfigure`
 
 In case you choose to do this but do not have multiline selection enabled in your peco config, read up on the configuration section of peco and amend your config with something like
 
@@ -57,12 +58,12 @@ In case you choose to do this but do not have multiline selection enabled in you
             ...
         }
         
-This makes it so you can hit Ctrl+Space a bunch of times and select a number of bookmarks quickly and, additionally, use the left and right arrows to scroll to the left and right. Note: Selections persist through changes in the search term.
+This makes it so you can hit Ctrl+Space a bunch of times andh select a number of bookmarks quickly and, additionally, use the left and right arrows to scroll to the left and right. Note: Selections persist through changes in the search term.
 
 ## a bit more streamlined usage
 **Set up an alias** for your shell. Refer to your shell's manual on how to do that. If you do not know off of the top of your cat which one you are using, try entering `ps -p $$` into your terminal and hit enter. The end of the second line, for instance "zsh" or "csh", should tell you what term to throw in the general direction of google to get you on track.
 
-**Or**, quicker to access yet, **set up a hotkey using your window manager**. I can only outline a solution for one particular setup (mine) because of the diversity of desktop enironments. Using the window manager "awesome wm" I register a hotkey to execute something like
+**Or**, quicker to access yet, **set up a hotkey using your window manager**. I can only outline a solution for one particular setup (mine) because of the diversity of desktop environments. Using the window manager "awesome wm" I register a hotkey to execute something like
 
 `urxvt -e "<path-to-oil>/oil"`
 
@@ -70,7 +71,7 @@ Or even
 
 `urxvt -name bookmarkViewer -e "<path-to-oil>/oil"`
 
-in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules' section of your awesome wm config to have it opened in any special way you like. In my it starts fullscreen as seen in the demo motion picture.
+in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules' section of your awesome wm config to have it opened in any special way you like. In my case it starts fullscreen as seen in the demo motion picture.
 
 ## dependencies
 * [buku](https://github.com/jarun/Buku)
