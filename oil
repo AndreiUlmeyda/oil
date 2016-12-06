@@ -7,7 +7,7 @@ function bookmarksAsJson {
 }
 
 function jsonToLine {
-	"$BASEDIR"/jsonToLine.jq
+	"$BASEDIR"/json-to-line.jq
 }
 
 function formatColumns {
