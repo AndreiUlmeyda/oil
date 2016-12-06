@@ -18,7 +18,7 @@ function searchAsYouType {
 	# enable multiline selection by default, show mode of operation, enable passing strings
 	# to peco which are not displayed but used as output
 	if [[ "$forceMultilineSelection" == true ]]; then
-		peco --rcfile $tmpPecoConfig --null
+		peco --rcfile "$tmpPecoConfig" --null
 	else
 		peco --prompt "$mode" --null
 	fi
@@ -54,8 +54,8 @@ function askUserForTag {
 }
 
 function tagBookmarks {
-	urlsAndIndices=(`searchAndSelectBookmarks`)
-	exitWhenEmpty $urlsAndIndices
+	urlsAndIndices=($(searchAndSelectBookmarks))
+	exitWhenEmpty "${urlsAndIndices[@]}"
 	tag=$(askUserForTag)
 
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
@@ -65,8 +65,8 @@ function tagBookmarks {
 }
 
 function updateTitles {
-	urlsAndIndices=(`searchAndSelectBookmarks`)
-	exitWhenEmpty $urlsAndIndices
+	urlsAndIndices=($(searchAndSelectBookmarks))
+	exitWhenEmpty "${urlsAndIndices[@]}"
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		index="${urlAndIndex#*|}"
 		buku -p "$index"
@@ -80,8 +80,8 @@ function updateTitles {
 }
 
 function deleteBookmarks {
-	urlsAndIndices=(`searchAndSelectBookmarks`)
-	exitWhenEmpty $urlsAndIndices
+	urlsAndIndices=($(searchAndSelectBookmarks))
+	exitWhenEmpty "${urlsAndIndices[@]}"
 
 	for urlAndIndex in "${urlsAndIndices[@]}"; do
 		url="${urlAndIndex%|*}"
@@ -146,7 +146,7 @@ function prepareMultilineSelection {
 	if [[ "$forceMultilineSelection" == true ]]; then
 		tmpPecoConfig=$(mktemp /tmp/oil-multiline-selection.XXX)
 		config="{\"Prompt\":\"$mode\",\"StickySelection\": true,\"Action\":{\"selectAndMoveDown\":[\"peco.ToggleSelection\",\"peco.SelectDown\"]},\"Keymap\":{\"C-Space\":\"selectAndMoveDown\",\"ArrowLeft\":\"peco.ScrollLeft\",\"ArrowRight\":\"peco.ScrollRight\"}}"
-		echo $config > $tmpPecoConfig
+		echo "$config" > "$tmpPecoConfig"
 	fi
 }
 
@@ -169,7 +169,7 @@ function runSelectedMode {
 
 function cleanUp {
 	if [[ -e $tmpPecoConfig ]]; then
-		rm $tmpPecoConfig
+		rm "$tmpPecoConfig"
 	fi
 }
 
@@ -179,7 +179,7 @@ mode="open"
 forceMultilineSelection=true
 
 # run
-parseFlags $@
+parseFlags "$@"
 prepareMultilineSelection
 runSelectedMode
 cleanUp
