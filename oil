@@ -90,9 +90,13 @@ function deleteBookmarks {
 	done
 }
 
+# parse command line arguments #
 function parseFlags {
+	projectWebpage="github.com/AndreiUlmeyda/oil"
+	parsingLibraryError="The method used to parse command line flags is not available on your system, visit $projectWebpage for directions."
+	helpText="Oil is a command line utility to quickly search, select and open your buku-managed bookmarks in your browser. When invoked with one of the flags -t/--tag, -T/--title, -/--delete it runs in different modes to add tags to/edit the titles of/delete your bookmarks. For a more complete reference visit $projectWebpage."
+	
 	# check if getopt is available
-	parsingLibraryError="The method used to parse command line flags is not available on your system, see the github page for directions."
 	getopt --test > /dev/null
 	if [[ $? -ne 4 ]]; then
 	    echo "$parsingLibraryError"
@@ -109,8 +113,6 @@ function parseFlags {
 	if [[ $? -ne 0 ]]; then
 	    exit 1
 	fi
-
-	helpText="herpderp"
 
 	while true; do
 	    case "$1" in
