@@ -1,0 +1,21 @@
+# Maintainer: Adrian Schurz <ulmeyda.smile at gmail dot com>
+pkgname=oil-git
+_gitname=oil
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='cli continuous-search frontend for the bookmark manager buku (git version)'
+arch=('any')
+url='https://github.com/AndreiUlmeyda/oil'
+license=('MIT')
+depends=('jq' 'bash' 'awk')
+makedepends=('make' 'git')
+provides=('oil')
+conflicts=('oil')
+options=(!emptydirs)
+source=("git+git://github.com/AndreiUlmeyda/${_gitname}.git")
+md5sums=('SKIP')
+
+package() {
+  cd "${srcdir}/${_gitname}"
+  make DESTDIR="${pkgdir}" install
+}
