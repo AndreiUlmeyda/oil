@@ -1,96 +1,6 @@
 #!/bin/bash
 
-BASEDIR=$(readlink -f "$0" | xargs dirname)
-
-function bookmarksAsJson {
-	buku -p -j
-}
-
-function jsonToLine {
-	"$BASEDIR"/json-to-line.jq
-}
-
-function formatColumns {
-	"$BASEDIR"/format-columns.awk
-}
-
-function searchAsYouType {
-	# enable multiline selection by default, show mode of operation, enable passing strings
-	# to peco which are not displayed but used as output
-	if [[ "$forceMultilineSelection" == true ]]; then
-		peco --rcfile "$tmpPecoConfig" --null
-	else
-		peco --prompt "$mode" --null
-	fi
-}
-
-function searchAndSelectBookmarks {
-	bookmarksAsJson |
-	jsonToLine |
-	formatColumns |
-	searchAsYouType
-}
-
-function openInBrowser {
-	while read -r selectedUrlAndIndex; do
-		selectedUrl=${selectedUrlAndIndex%|*}
-		xdg-open "$selectedUrl"
-	done
-}
-
-function openBookmarks {
-	searchAndSelectBookmarks | openInBrowser
-}
-
-function exitWhenEmpty {
-	if [[ -z $1 ]]; then
-		exit 0
-	fi
-}
-
-function askUserForTag {
-	read -r -p "input the comma separated list of tags to add: " tag
-	echo "$tag"
-}
-
-function tagBookmarks {
-	urlsAndIndices=($(searchAndSelectBookmarks))
-	exitWhenEmpty "${urlsAndIndices[@]}"
-	tag=$(askUserForTag)
-
-	for urlAndIndex in "${urlsAndIndices[@]}"; do
-		index="${urlAndIndex#*|}"
-		buku --update "$index" --tag "$tag"
-	done
-}
-
-function updateTitles {
-	urlsAndIndices=($(searchAndSelectBookmarks))
-	exitWhenEmpty "${urlsAndIndices[@]}"
-	for urlAndIndex in "${urlsAndIndices[@]}"; do
-		index="${urlAndIndex#*|}"
-		buku -p "$index"
-		read -r -p "Enter a new title for the bookmark above: " newTitle
-		if [[ -n $newTitle ]]; then
-			buku --tacit -u "$index" -t "$newTitle"
-		else
-			echo "The new title was empty, no update was done."
-		fi
-	done
-}
-
-function deleteBookmarks {
-	urlsAndIndices=($(searchAndSelectBookmarks))
-	exitWhenEmpty "${urlsAndIndices[@]}"
-
-	for urlAndIndex in "${urlsAndIndices[@]}"; do
-		url="${urlAndIndex%|*}"
-		withoutTrailingSlash="${url%/}"
-		buku --sany "$withoutTrailingSlash" --delete
-	done
-}
-
-# parse command line arguments #
+# parse command line flags
 function parseFlags {
 	projectWebpage="github.com/AndreiUlmeyda/oil"
 	parsingLibraryError="The method used to parse command line flags is not available on your system, visit $projectWebpage for directions."
@@ -143,7 +53,8 @@ function parseFlags {
 	done
 }
 
-# if not specified otherwise, make a temporary file for use as a custom peco config that has multiline selection enabled
+# if not specified otherwise, make a temporary file for use as a custom peco
+# config that has multiline selection enabled
 function prepareMultilineSelection {
 	if [[ "$forceMultilineSelection" == true ]]; then
 		tmpPecoConfig=$(mktemp /tmp/oil-multiline-selection.XXX)
@@ -152,7 +63,69 @@ function prepareMultilineSelection {
 	fi
 }
 
-function runSelectedMode {
+function deleteTmpFiles {
+	if [[ -e $tmpPecoConfig ]]; then
+		rm "$tmpPecoConfig"
+	fi
+}
+
+function updateTitle {
+	index="${1#*|}"
+	buku --print "$index"
+	read -r -p "Enter a new title for the bookmark above: " newTitle
+	if [[ -n $newTitle ]]; then
+		buku --tacit --update "$index" --title "$newTitle"
+	else
+		echo "The new title was empty, no update was done."
+	fi
+}
+
+function updateTitles {
+	forEachBookmark updateTitle 
+}
+
+function deleteBookmark {
+	url="${urlAndIndex%|*}"
+	withoutTrailingSlash="${url%/}"
+	buku --sany "$withoutTrailingSlash" --delete
+}
+
+function deleteBookmarks {
+	forEachBookmark deleteBookmark
+}
+
+function tagBookmark {
+	index="${1#*|}"
+	buku --update "$index" --tag "$tag"
+}
+
+function askUserForTag {
+	read -r -p "input the comma separated list of tags to add: " tag
+	echo "$tag"
+}
+
+function tagBookmarks {
+	tag=$(askUserForTag)
+	forEachBookmark tagBookmark
+}
+
+function openInBrowser {
+	url=${urlAndIndex%|*}
+	xdg-open "$url"
+}
+
+function forEachBookmark {
+	operation=$1
+	for urlAndIndex in ${selection[@]}; do
+		${operation} "$urlAndIndex"
+	done
+}
+
+function openBookmarks {
+	forEachBookmark openInBrowser
+}
+
+function processBookmarks {
 	case "$mode" in
 	open)
 		openBookmarks
@@ -169,19 +142,53 @@ function runSelectedMode {
 	esac
 }
 
-function cleanUp {
-	if [[ -e $tmpPecoConfig ]]; then
-		rm "$tmpPecoConfig"
+function exitOnEmptySelection {
+	if [[ -z "${selection[@]}" ]]; then
+		exit 0
 	fi
 }
 
+function searchAsYouType {
+	# pass multiline-selection config, show mode of operation, enable
+	# passing strings to peco which are not displayed but used as output
+	if [[ "$forceMultilineSelection" == true ]]; then
+		peco --rcfile "$tmpPecoConfig" --null
+	else
+		peco --prompt "$mode" --null
+	fi
+}
 
-# default behaviour
+function formatColumns {
+	"$LIBDIR"/format-columns.awk
+}
+
+function jsonToLine {
+	"$LIBDIR"/json-to-line.jq
+}
+
+function bookmarksAsJson {
+	buku --print --json
+}
+
+function searchAndSelectBookmarks {
+	bookmarksAsJson |
+	jsonToLine |
+	formatColumns |
+	searchAsYouType
+}
+
+# globals
+LIBDIR=/usr/lib/oil
 mode="open"
 forceMultilineSelection=true
+declare -a selection
 
 # run
 parseFlags "$@"
 prepareMultilineSelection
-runSelectedMode
-cleanUp
+
+selection=$(searchAndSelectBookmarks)
+exitOnEmptySelection
+processBookmarks
+
+deleteTmpFiles
