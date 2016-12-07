@@ -32,6 +32,10 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 ## installation
 After cloning this repository, make sure the listed dependencies are installed, navigate to it's directory and run `make install`. After that, your terminal should respond very kindly to the command `oil` and as soon as that one gets going you are free as a bird to just start typing away and hit enter when you found what you were looking for (the latter  being great life advice, too).
 
+Note: Packages for specific linux distributions are not published as of yet since this makes sense only after the user base is of order "3 people or more". However, if you are using Arch-Linux and want this package to be tracked by its package manager you can build and install a package manually. For this purpose a file named PKGBUILD resides in the `misc/` directory. If you run `makepkg` inside a direcory where this file is located, a proper Arch-Linux package will be assembled there. The generated package file can then be installed using `sudo pacman -U oil-git-0.1.0-1-any.pkg.tar.xz`.
+
+Feel free, though, to write me an issue requesting a package for your distro. And if you know what you are doing, I hereby grant you permission to take matters into your own hands and publish one yourself. Godspeed.
+
 ## multiline selection
 This is a feature of peco that is not enabled by default. Anticipating that most users will not already be using peco but will want to use the feature and not drudge through a bunch of configuration options, oil enables it by default by passing a custom configuration file to peco. This leads to the users configuration being overruled. Should you want to use your own peco config, disable this behaviour via the flags
 `oil -p` or equivalently `oil --no-peco-reconfiguration`
