@@ -29,11 +29,12 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
       Note: Mind that the three modes are mutually exclusive. If more than one is specified it could
       cause all sorts of mayhem, who knows (the last one applies, but please don't).
 
-After cloning the repository, navigate to it's directory, make sure the three scripts are executable and simply invoke oil inside a terminal like so
-
-`./oil`
-
-start typing and hit enter when you found what you were looking for (the latter  being great life advice, too).
+# installation
+After cloning this repository, navigate to it's directory and run
+`make install`
+After that your terminal should respond very kindly to the command
+`oil`
+and as soon as that gets going you should just start typing and hit enter when you found what you were looking for (the latter  being great life advice, too).
 
 ## multiline selection
 This is a feature of peco that is not enabled by default. Anticipating that most users will not already be using peco but will want to use the feature and not drudge through a bunch of configuration options, oil enables it by default by passing a custom configuration file to peco. This leads to the users configuration being overruled. Should you want to use your own peco config, disable this behaviour via the flags
