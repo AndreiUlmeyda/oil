@@ -10,6 +10,7 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them.
 * Title-Mode: After selecting the bookmarks, get prompted for a new title for each one.
 * Delete-Mode: After selecting the bookmarks, delete each one.
+* Add a URL from clipboard to your bookmarks.
 
 ## basic usage
 
@@ -23,6 +24,8 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
                 run in title-mode (see features)
       -d, --delete
                 run in delete-mode (see features)
+      -a, --add
+                add a bookmark from clipboard
       -p, --no-peco-reconfiguration
                 do not overwrite the users peco configuration (see section about multiline selection)
       

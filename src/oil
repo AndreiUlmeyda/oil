@@ -14,8 +14,8 @@ function parseFlags {
 	fi
 
 	# specify valid flags
-	shortOptions=htTpd
-	longOptions=help,tag,title,delete,no-peco-reconfiguration
+	shortOptions=hatTpd
+	longOptions=help,add,tag,title,delete,no-peco-reconfiguration
 
 	parsed=$(getopt --options $shortOptions --longoptions $longOptions --name "$0" -- "$@")
 
@@ -26,29 +26,13 @@ function parseFlags {
 
 	while true; do
 	    case "$1" in
-	    	-h|--help)
-				echo "$helpText"
-				exit 0
-				;;
-	        -t|--tag)
-	            mode="tag"
-	            shift
-	            ;;
-	        -T|--title)
-	            mode="title"
-	            shift
-	            ;;
-	        -d|--delete)
-	        	mode="delete"
-	        	shift
-	        	;;
-	        -p|--no-peco-reconfiguration)
-	        	forceMultilineSelection=false
-	        	shift
-	        	;;
-	        *)
-				break
-				;;
+	    	-h|--help) echo "$helpText"; exit 0;;
+			-a|--add) mode="add"; skipSelection=true; shift;;
+	        -t|--tag) mode="tag"; shift;;
+	        -T|--title) mode="title"; shift;;
+	        -d|--delete) mode="delete"; shift;;
+	        -p|--no-peco-reconfiguration) forceMultilineSelection=false; shift;;
+	        *) break;;
 	    esac
 	done
 }
@@ -125,23 +109,6 @@ function openBookmarks {
 	forEachBookmark openInBrowser
 }
 
-function processBookmarks {
-	case "$mode" in
-	open)
-		openBookmarks
-		;;
-	tag)
-		tagBookmarks
-		;;
-	title)
-		updateTitles
-		;;
-	delete)
-		deleteBookmarks
-		;;
-	esac
-}
-
 function exitOnEmptySelection {
 	if [[ -z "${selection[@]}" ]]; then
 		exit 0
@@ -177,6 +144,28 @@ function searchAndSelectBookmarks {
 	searchAsYouType
 }
 
+function addBookmarkFromClipboard {
+	source $LIBDIR/bookmarkFromClipboard.sh
+	exit 0
+}
+
+function processBookmarks {
+	if [[ "$mode" == "add" ]]; then
+		addBookmarkFromClipboard
+		exit 0
+	fi
+
+	selection=$(searchAndSelectBookmarks)
+	exitOnEmptySelection
+
+	case "$mode" in
+		open) openBookmarks;;
+		tag) tagBookmarks;;
+		title) updateTitles;;
+		delete) deleteBookmarks;;
+	esac
+}
+
 # globals
 LIBDIR=/usr/lib/oil
 mode="open"
@@ -187,8 +176,6 @@ declare -a selection
 parseFlags "$@"
 prepareMultilineSelection
 
-selection=$(searchAndSelectBookmarks)
-exitOnEmptySelection
 processBookmarks
 
 deleteTmpFiles
