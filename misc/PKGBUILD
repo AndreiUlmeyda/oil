@@ -1,7 +1,7 @@
 # Maintainer: Adrian Schurz <ulmeyda.smile at gmail dot com>
 pkgname=oil-git
 _gitname=oil
-pkgver=0.1.0
+pkgver=latest
 pkgrel=1
 pkgdesc='cli continuous-search frontend for the bookmark manager buku (git version)'
 arch=('any')
@@ -14,6 +14,15 @@ conflicts=('oil')
 options=(!emptydirs)
 source=("git+git://github.com/AndreiUlmeyda/${_gitname}.git")
 md5sums=('SKIP')
+
+pkgver() {
+	cd "${srcdir}/${_gitname}"
+	git fetch --tags
+	latesTagRev="$(git rev-list --tags --max-count=1)"
+	latestTag="$(git describe --tags "$latesTagRev")"
+	git checkout "$latestTag"
+	echo "$latestTag"
+}
 
 package() {
   cd "${srcdir}/${_gitname}"
