@@ -145,7 +145,7 @@ function searchAndSelectBookmarks {
 }
 
 function addBookmarkFromClipboard {
-	source $LIBDIR/bookmarkFromClipboard.sh
+	source $LIBDIR/bookmark-from-clipboard.sh
 	exit 0
 }
 
