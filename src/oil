@@ -3,9 +3,9 @@
 # parse command line flags
 function parseFlags {
 	projectWebpage="github.com/AndreiUlmeyda/oil"
-	parsingLibraryError="The method used to parse command line flags is not available on your system, visit $projectWebpage for directions."
-	helpText="Oil is a command line utility to quickly search, select and open your buku-managed bookmarks in your browser. When invoked with one of the flags -t/--tag, -T/--title, -/--delete it runs in different modes to add tags to/edit the titles of/delete your bookmarks. For a more complete reference visit $projectWebpage."
-	
+	parsingLibraryError="oil error: 'getopt' needs to be available on your system in order to run oil"
+	helpText="Oil is a command line utility to quickly search, select and open your buku-managed bookmarks in your browser. When invoked with one of the flags -t/--tag, -T/--title, -d/--delete it runs in different modes to add tags to/edit the titles of/delete your bookmarks. For a more complete reference visit $projectWebpage."
+
 	# check if getopt is available
 	getopt --test > /dev/null
 	if [[ $? -ne 4 ]]; then
