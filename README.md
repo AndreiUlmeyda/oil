@@ -7,10 +7,10 @@ Search-as-you-type cli frontend for the [buku](https://github.com/jarun/Buku) bo
 * View a list of your (buku managed) bookmarks and their tags and titles in your terminal
 * While typing, have the list instantaneously filtered accordingly
 * After selecting one (hit Enter) or multiple bookmarks (read below), have them opened in your browser
-* Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them.
-* Title-Mode: After selecting the bookmarks, get prompted for a new title for each one.
-* Delete-Mode: After selecting the bookmarks, delete each one.
-* Add a URL from clipboard to your bookmarks.
+* Tag-Mode: After selecting the bookmarks, get prompted for a tag and have it applied to all of them
+* Title-Mode: After selecting the bookmarks, get prompted for a new title for each one
+* Delete-Mode: After selecting the bookmarks, delete each one
+* Add a URL from clipboard to your bookmarks
 
 ## basic usage
 
@@ -62,7 +62,7 @@ In case you choose to do this but do not have multiline selection enabled in you
             ...
         }
 
-This makes it so you can hit Ctrl+Space a bunch of times andh select a number of bookmarks quickly and, additionally, use the left and right arrows to scroll to the left and right. Note: Selections persist through changes in the search term.
+This makes it so you can hit Ctrl+Space a bunch of times and select a number of bookmarks quickly and, additionally, use the left and right arrows to scroll to the left and right. Note: Selections persist through changes in the search term.
 
 ## a bit more streamlined usage
 **Set up an alias** for your shell. Refer to your shell's manual on how to do that. If you do not know off of the top of your cat which one you are using, try entering `ps -p $$` into your terminal and hit enter. The end of the second line, for instance "zsh" or "csh", should tell you what term to throw in the general direction of google to get you on track.
@@ -81,11 +81,15 @@ in which case the 'instance' property of it's window is set to 'bookmarkViewer' 
 * [buku](https://github.com/jarun/Buku)
 * [peco](https://github.com/peco/peco)
 * [jq](https://github.com/stedolan/jq)
-* xsel (optional Linux/X-Server utility used to add bookmarks from clipboard)
+* xsel - a linux/x-server utility used to grab content from the clipboard
+* getopt - used to parse command line arguments, this is listed for the sake of completeness, it should already be present on your system
 
 ## known issues
 * I think it likely that you will run into issues regarding the length of the titles and tags of your bookmarks and the width of your terminal in your favourite use case. Write me an issue and we will, together, iron out the best compromise or configuration option. For the moment, if you have that problem and feel adventurous, take a look at the awk script itself and look at the two lines setting up `printf` near the end. Fuck around with them and the variables specifying the column widths until the result pleases you. Good luck, my friend.
 * In Delete-Mode: When deleting an URL that is a substring of another one (for instance youtube.com and youtube.com/...) then you will not be able to delete only this one. For now, this will not be fixed (see #17). I advise you to use buku directly in this case.
+
+## kamehamehaskell - or how I learned to stop worrying and love the compiler
+I am currently in the process of porting this project to haskell in order to learn the language, enjoy a better testing environment (although testing IO code has turned out to be a potentially hairy subject as well) and, hopefully, up my shell scripting game. Not particularily trying to bash any language, but haskell should **actually** manage to scale past two hundred lines of code (and would the crowd please go wild now). Watch me squirm as I do it, have a laugh. Drop funny issues to help keeping me engaged in my abusive relationship with the glaskow haskell compiler. See you [there](https://github.com/AndreiUlmeyda/hoil) - probably not, but what can you do.
 
 ## lore
 Lore is permanently disabled now. He loves his brother, though, so that's a plus.
