@@ -65,7 +65,7 @@ function updateTitle {
 }
 
 function updateTitles {
-	forEachBookmark updateTitle 
+	forEachBookmark updateTitle
 }
 
 function deleteBookmark {
@@ -80,16 +80,16 @@ function deleteBookmarks {
 
 function tagBookmark {
 	index="${1#*|}"
-	buku --update "$index" --tag "$tag"
+	buku --update "$index" --tag "$tags"
 }
 
-function askUserForTag {
-	read -r -p "input the comma separated list of tags to add: " tag
-	echo "$tag"
+function askUserForTags {
+	read -r -p "Input the comma separated list of tags to add: " tags
+	echo "$tags"
 }
 
 function tagBookmarks {
-	tag=$(askUserForTag)
+	tags=$(askUserForTags)
 	forEachBookmark tagBookmark
 }
 
@@ -144,8 +144,35 @@ function searchAndSelectBookmarks {
 	searchAsYouType
 }
 
+function askForTitleAndTagsThenAdd {
+	url=$1
+	read -p "Enter a title to set a custom one, leave empty otherwise: " customTitle
+	tags=$(askUserForTags)
+	addBookmark="buku --add $url"
+	if [[ -n "$customTitle" ]]; then
+		addBookmark="$addBookmark --title $customTitle"
+	fi
+	if [[ -n "$tags" ]]; then
+		addBookmark="$addBookmark --tag $tags"
+	fi
+	$addBookmark
+}
+
 function addBookmarkFromClipboard {
-	source $LIBDIR/bookmark-from-clipboard.sh
+	urlFromClipboard=$(xsel)
+
+	if [[ -n "$urlFromClipboard" ]]; then
+		echo "$urlFromClipboard"
+		read -p "Create a new bookmark using the above as URL? (y/n): " confirmation
+		case "${confirmation:0:3}" in
+		    y|Y|yes|Yes ) askForTitleAndTagsThenAdd "$urlFromClipboard";;
+		    * )   echo "Adding bookmark was cancelled.";;
+		esac
+	else
+		echo "Clipboard is empty, not adding any bookmarks."
+		exit 0
+	fi
+
 	exit 0
 }
 
@@ -175,7 +202,5 @@ declare -a selection
 # run
 parseFlags "$@"
 prepareMultilineSelection
-
 processBookmarks
-
 deleteTmpFiles
