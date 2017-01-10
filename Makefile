@@ -9,4 +9,5 @@ install:
 	install -Dm755 src/format-columns.awk $(DESTDIR)$(LIBDIR)/format-columns.awk
 
 uninstall:
+	rm -f src/oil $(DESTDIR)$(BINDIR)/oil
 	rm -rf $(DESTDIR)$(LIBDIR)
