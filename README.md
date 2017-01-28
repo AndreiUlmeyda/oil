@@ -41,7 +41,7 @@ Feel free, though, to write me an issue requesting a package for your distro. An
 
 ## multiline selection
 This is a feature of peco that is not enabled by default. Anticipating that most users will not already be using peco but will want to use the feature and not drudge through a bunch of configuration options, oil enables it by default by passing a custom configuration file to peco. This leads to the users configuration being overruled. Should you want to use your own peco config, disable this behaviour via the flags
-`oil -p` or equivalently `oil --no-peco-reconfiguration`
+`oil -p` or, equivalently, `oil --no-peco-reconfiguration`
 
 In case you choose to do this but do not have multiline selection enabled in your peco config, read up on the configuration section of peco and amend your config with something like
 
@@ -69,11 +69,11 @@ This makes it so you can hit Ctrl+Space a bunch of times and select a number of 
 
 **Or**, quicker to access yet, **set up a hotkey using your window manager**. I can only outline a solution for one particular setup (mine) because of the diversity of desktop environments. Using the window manager "awesome wm" I register a hotkey to execute something like
 
-`urxvt -e "<path-to-oil>/oil"`
+`urxvt -e "oil"`
 
 Or even
 
-`urxvt -name bookmarkViewer -e "<path-to-oil>/oil"`
+`urxvt -name bookmarkViewer -e "oil"`
 
 in which case the 'instance' property of it's window is set to 'bookmarkViewer' and can now be referred to in the 'rules' section of your awesome wm config to have it opened in any special way you like. In my case it starts fullscreen as seen in the demo motion picture.
 
@@ -89,7 +89,7 @@ in which case the 'instance' property of it's window is set to 'bookmarkViewer' 
 * In Delete-Mode: When deleting an URL that is a substring of another one (for instance youtube.com and youtube.com/...) then you will not be able to delete only this one. For now, this will not be fixed (see #17). I advise you to use buku directly in this case.
 
 ## kamehamehaskell - or how I learned to stop worrying and love the compiler
-I am currently in the process of porting this project to haskell in order to learn the language, enjoy a better testing environment (although testing IO code has turned out to be a potentially hairy subject as well) and, hopefully, up my shell scripting game. Not particularily trying to bash any language, but haskell should **actually** manage to scale past two hundred lines of code (and would the crowd please go wild now). Watch me squirm as I do it, have a laugh. Drop funny issues to help keeping me engaged in my abusive relationship with the glaskow haskell compiler. See you [there](https://github.com/AndreiUlmeyda/hoil) - probably not, but what can you do.
+I am currently in the process of porting this project to haskell in order to learn the language, enjoy a better testing environment (although testing IO code has turned out to be a potentially hairy subject as well) and, hopefully, up my shell scripting game. Not particularily trying to bash any language, but haskell should **actually** manage to scale past two hundred lines of code (and would the crowd please go mild now). Watch me squirm as I do it, have a laugh. Drop funny issues to help keeping me engaged in my abusive relationship with the glaskow haskell compiler. See you [there](https://github.com/AndreiUlmeyda/hoil) - probably not, but what can you do.
 
 ## lore
 Lore is permanently disabled now. He loves his brother, though, so that's a plus.
