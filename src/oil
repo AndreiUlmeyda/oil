@@ -194,7 +194,7 @@ function processBookmarks {
 }
 
 # globals
-LIBDIR=/usr/lib/oil
+LIBDIR=/usr/local/lib/oil
 mode="open"
 forceMultilineSelection=true
 declare -a selection
