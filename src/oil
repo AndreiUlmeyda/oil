@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # parse command line flags
 function parseFlags {
@@ -194,7 +194,7 @@ function processBookmarks {
 }
 
 # globals
-LIBDIR=/usr/lib/oil
+LIBDIR=/usr/local/lib/oil
 mode="open"
 forceMultilineSelection=true
 declare -a selection

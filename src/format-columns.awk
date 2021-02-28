@@ -1,4 +1,4 @@
-#! /bin/awk -f
+#!/usr/bin/env awk -f
 
 # take a line containing a "↓"-separated string like
 # best title↓worst tag, mediocre tag↓https://someurl↓42
@@ -13,7 +13,7 @@ BEGIN {
 	tagColumnWidth = 30
 }
 
-{	
+{
 	# make fields fit intended column widths
 	prunedTitle = substr($1, 1, titleColumnWidth)
 	prunedTags = substr($2, 1, tagColumnWidth)

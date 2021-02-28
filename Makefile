@@ -1,5 +1,5 @@
-BINDIR ?= /usr/bin
-LIBDIR ?= /usr/lib/oil
+BINDIR ?= /usr/local/bin
+LIBDIR ?= /usr/local/lib/oil
 
 .PHONY: install uninstall
 
