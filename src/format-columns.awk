@@ -1,4 +1,4 @@
-#!/usr/bin/env awk -f
+#!/usr/bin/env -S awk -f
 
 # take a line containing a "↓"-separated string like
 # best title↓worst tag, mediocre tag↓https://someurl↓42

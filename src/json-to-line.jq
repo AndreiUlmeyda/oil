@@ -1,4 +1,4 @@
-#!/usr/bin/env jq -fr
+#!/usr/bin/env -S jq -fr
 
 # append all values to one line with separator "↓", handle input of either
 # single objects or object arrays
