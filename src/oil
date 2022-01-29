@@ -126,11 +126,11 @@ function searchAsYouType {
 }
 
 function formatColumns {
-	"$LIBDIR"/format-columns.awk
+        "$LD_LIBRARY_PATH"/format-columns.awk
 }
 
 function jsonToLine {
-	"$LIBDIR"/json-to-line.jq
+	"$LD_LIBRARY_PATH"/json-to-line.jq
 }
 
 function bookmarksAsJson {
@@ -194,7 +194,6 @@ function processBookmarks {
 }
 
 # globals
-LIBDIR=/usr/local/lib/oil
 mode="open"
 forceMultilineSelection=true
 declare -a selection
